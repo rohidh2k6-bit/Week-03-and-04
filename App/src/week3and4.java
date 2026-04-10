@@ -1,32 +1,20 @@
 import java.util.*;
 
+class Asset {
+    String name;
+    double returnRate;
+    double volatility;
+
+    Asset(String n, double r, double v) {
+        name = n;
+        returnRate = r;
+        volatility = v;
+    }
+}
+
 public class week3and4 {
 
-    // Merge Sort (ASC)
-    static void mergeSort(int[] arr, int l, int r) {
-        if (l >= r) return;
-
-        int m = (l + r) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
-    }
-
-    static void merge(int[] arr, int l, int m, int r) {
-        int[] temp = new int[r - l + 1];
-        int i = l, j = m + 1, k = 0;
-
-        while (i <= m && j <= r)
-            temp[k++] = (arr[i] <= arr[j]) ? arr[i++] : arr[j++];
-
-        while (i <= m) temp[k++] = arr[i++];
-        while (j <= r) temp[k++] = arr[j++];
-
-        System.arraycopy(temp, 0, arr, l, temp.length);
-    }
-
-    // Quick Sort (DESC)
-    static void quickSort(int[] arr, int l, int r) {
+    static void quickSort(Asset[] arr, int l, int r) {
         if (l < r) {
             int p = partition(arr, l, r);
             quickSort(arr, l, p - 1);
@@ -34,20 +22,23 @@ public class week3and4 {
         }
     }
 
-    static int partition(int[] arr, int l, int r) {
-        int pivot = arr[r];
+    static int partition(Asset[] arr, int l, int r) {
+        Asset pivot = arr[r];
         int i = l - 1;
 
         for (int j = l; j < r; j++) {
-            if (arr[j] > pivot) {
+            if (arr[j].returnRate > pivot.returnRate ||
+                    (arr[j].returnRate == pivot.returnRate &&
+                            arr[j].volatility < pivot.volatility)) {
+
                 i++;
-                int t = arr[i];
+                Asset t = arr[i];
                 arr[i] = arr[j];
                 arr[j] = t;
             }
         }
 
-        int t = arr[i + 1];
+        Asset t = arr[i + 1];
         arr[i + 1] = arr[r];
         arr[r] = t;
 
@@ -56,21 +47,16 @@ public class week3and4 {
 
     public static void main(String[] args) {
 
-        int[] arr = {500, 100, 300};
-
-        mergeSort(arr, 0, arr.length - 1);
-
-        System.out.println("Merge Sorted:");
-        System.out.println(Arrays.toString(arr));
+        Asset[] arr = {
+                new Asset("AAPL", 12, 5),
+                new Asset("TSLA", 8, 7),
+                new Asset("GOOG", 15, 4)
+        };
 
         quickSort(arr, 0, arr.length - 1);
 
-        System.out.println("Quick Sorted:");
-        System.out.println(Arrays.toString(arr));
-
-        int sum = 0;
-        for (int v : arr) sum += v;
-
-        System.out.println("Total Volume: " + sum);
+        for (Asset a : arr) {
+            System.out.println(a.name + " " + a.returnRate);
+        }
     }
 }
