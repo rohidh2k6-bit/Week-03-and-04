@@ -1,62 +1,30 @@
-import java.util.*;
-
-class Asset {
-    String name;
-    double returnRate;
-    double volatility;
-
-    Asset(String n, double r, double v) {
-        name = n;
-        returnRate = r;
-        volatility = v;
-    }
-}
-
 public class week3and4 {
 
-    static void quickSort(Asset[] arr, int l, int r) {
-        if (l < r) {
-            int p = partition(arr, l, r);
-            quickSort(arr, l, p - 1);
-            quickSort(arr, p + 1, r);
+    static int linearSearch(String[] arr, String target) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(target)) return i;
         }
+        return -1;
     }
 
-    static int partition(Asset[] arr, int l, int r) {
-        Asset pivot = arr[r];
-        int i = l - 1;
+    static int binarySearch(String[] arr, String target) {
+        int l = 0, r = arr.length - 1;
 
-        for (int j = l; j < r; j++) {
-            if (arr[j].returnRate > pivot.returnRate ||
-                    (arr[j].returnRate == pivot.returnRate &&
-                            arr[j].volatility < pivot.volatility)) {
+        while (l <= r) {
+            int m = (l + r) / 2;
 
-                i++;
-                Asset t = arr[i];
-                arr[i] = arr[j];
-                arr[j] = t;
-            }
+            if (arr[m].equals(target)) return m;
+            else if (arr[m].compareTo(target) < 0) l = m + 1;
+            else r = m - 1;
         }
-
-        Asset t = arr[i + 1];
-        arr[i + 1] = arr[r];
-        arr[r] = t;
-
-        return i + 1;
+        return -1;
     }
 
     public static void main(String[] args) {
 
-        Asset[] arr = {
-                new Asset("AAPL", 12, 5),
-                new Asset("TSLA", 8, 7),
-                new Asset("GOOG", 15, 4)
-        };
+        String[] arr = {"accA", "accB", "accB", "accC"};
 
-        quickSort(arr, 0, arr.length - 1);
-
-        for (Asset a : arr) {
-            System.out.println(a.name + " " + a.returnRate);
-        }
+        System.out.println("Linear: " + linearSearch(arr, "accB"));
+        System.out.println("Binary: " + binarySearch(arr, "accB"));
     }
 }
